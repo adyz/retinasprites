@@ -1,0 +1,14 @@
+/* line 3, ../sass/main.scss */
+.icons {
+  margin: 0;
+  padding: 0;
+}
+/* line 6, ../sass/main.scss */
+.icons li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: inline-block;
+  width: 25%;
+  padding: .5em;
+}

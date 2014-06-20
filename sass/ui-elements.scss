@@ -1,0 +1,60 @@
+@import 'compass';
+
+@mixin bp-retina {
+  @media
+  only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (   min--moz-device-pixel-ratio: 2),
+  only screen and (     -o-min-device-pixel-ratio: 2/1),
+  only screen and (        min-device-pixel-ratio: 2),
+  only screen and (                min-resolution: 192dpi),
+  only screen and (                min-resolution: 2dppx) {
+    @content;
+  }
+}
+
+$naviconsNormal: sprite-map("icons/normal/*.png", $spacing: 10px);
+$naviconsRetina: sprite-map("icons/retina/*.png", $spacing: 20px);
+.icn{
+  background: $naviconsNormal;
+  display: inline-block; // or block
+  @include bp-retina {
+    background: $naviconsRetina;
+    //Instead of sprite-path might be sprite-url
+    @include background-size(image-width(sprite-path($naviconsNormal)) image-height(sprite-path($naviconsNormal)));
+  }
+}
+@each $i in sprite_names($naviconsNormal){
+  .icn-#{$i}{
+    background-position: sprite-position($naviconsNormal, $i);
+    @include sprite-dimensions($naviconsNormal, $i);
+  }
+}
+@include bp-retina {
+  @each $i in sprite_names($naviconsNormal){
+    .icn-#{$i}{
+      $ypos: round(nth(sprite-position($naviconsRetina, $i), 2) / 2);
+      background-position: 0 $ypos;
+    }
+  }
+}
+
+
+//Style guides
+$i: 0;
+@each $icon, $content in sprite_names($naviconsNormal) {
+  $i: $i + 1;
+  .styleguide .icons li:nth-child(#{$i}) {
+    &:before {
+      content: '';
+      @extend .icn;
+      @extend .icn-#{$icon};
+      display: inline-block;
+
+    }
+    &:after {
+      content: 'icon-#{$icon}';
+      padding-left:10px;
+      display: inlin-block;
+    }
+  }
+}
